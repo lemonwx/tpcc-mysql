@@ -62,7 +62,7 @@ try_stmt_execute(MYSQL_STMT *mysql_stmt)
  * main() | ARGUMENTS |      Warehouses n [Debug] [Help]
  * +==================================================================
  */
-void 
+void
 main(argc, argv)
 	int             argc;
 	char           *argv[];
@@ -216,8 +216,8 @@ main(argc, argv)
 	}
 
 	if( mysql_stmt_prepare(stmt[0],
-			       "INSERT INTO item values(?,?,?,?,?)",
-			       34) ) goto Error_SqlCall_close;
+			       "INSERT INTO item(i_id, i_im_id, i_name, i_price, i_data)values(?,?,?,?,?)",
+			       73) ) goto Error_SqlCall_close;
 	if( mysql_stmt_prepare(stmt[1],
 			       "INSERT INTO warehouse values(?,?,?,?,?,?,?,?,?)",
 			       47) ) goto Error_SqlCall_close;
@@ -255,7 +255,9 @@ main(argc, argv)
 	printf("TPCC Data Load Started...\n");
 
 	if(particle_flg==0){
+        mysql_query(mysql, "begin");
 	    LoadItems();
+        mysql_query(mysql, "commit");
 	    LoadWare();
 	    LoadCust();
 	    LoadOrd();
@@ -304,7 +306,7 @@ Error_SqlCall:
  * ARGUMENTS |      none
  * +==================================================================
  */
-void 
+void
 LoadItems()
 {
 
@@ -419,7 +421,7 @@ sqlerr:
  * table |      Loads Stock, District as Warehouses are created | ARGUMENTS |
  * none +==================================================================
  */
-void 
+void
 LoadWare()
 {
 
@@ -515,7 +517,7 @@ sqlerr:
  * | ARGUMENTS |      none
  * +==================================================================
  */
-void 
+void
 LoadCust()
 {
 
@@ -542,7 +544,7 @@ sqlerr:
  * Order_Line Tables | ARGUMENTS |      none
  * +==================================================================
  */
-void 
+void
 LoadOrd()
 {
 
@@ -571,7 +573,7 @@ sqlerr:
  * ARGUMENTS |      w_id - warehouse id
  * +==================================================================
  */
-int 
+int
 Stock(w_id)
 	int             w_id;
 {
@@ -720,7 +722,7 @@ sqlerr:
  * | ARGUMENTS |      w_id - warehouse id
  * +==================================================================
  */
-int 
+int
 District(w_id)
 	int             w_id;
 {
@@ -815,7 +817,7 @@ sqlerr:
  * customer id |      d_id - district id |      w_id - warehouse id
  * +==================================================================
  */
-void 
+void
 Customer(d_id, w_id)
 	int             d_id;
 	int             w_id;
@@ -1010,7 +1012,7 @@ sqlerr:
  * warehouse id
  * +==================================================================
  */
-void 
+void
 Orders(d_id, w_id)
 	int             d_id, w_id;
 {
@@ -1168,7 +1170,7 @@ retry:
 			    /*EXEC SQL INSERT INTO
 				    order_line
 				    values(:o_id,:o_d_id,:o_w_id,:ol,
-					   :ol_i_id,:ol_supply_w_id, 
+					   :ol_i_id,:ol_supply_w_id,
 					   :timestamp,
 					   :ol_quantity,:ol_amount,:ol_dist_info);*/
 
@@ -1227,7 +1229,7 @@ sqlerr:
  * ARGUMENTS
  * +==================================================================
  */
-void 
+void
 MakeAddress(str1, str2, city, state, zip)
 	char           *str1;
 	char           *str2;
@@ -1248,7 +1250,7 @@ MakeAddress(str1, str2, city, state, zip)
  * SQL call. | ARGUMENTS
  * +==================================================================
  */
-void 
+void
 Error(mysql_stmt)
         MYSQL_STMT   *mysql_stmt;
 {
